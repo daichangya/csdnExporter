@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import run.halo.app.Application;
 import run.halo.app.model.entity.*;
 import run.halo.app.model.enums.PostEditorType;
 import run.halo.app.model.enums.PostStatus;
@@ -70,7 +71,8 @@ public class PostRepositoryTest {
 //            System.out.println(csdnBean.getCategories());
 //            System.out.println("tags: "+csdnBean.getTags());
             Post post = new Post();
-            post.setOriginalContent(csdnBean.getContent());
+            post.setFormatContent(csdnBean.getContent());
+            post.setOriginalContent(csdnBean.getMarkdowncontent());
             post.setStatus(PostStatus.PUBLISHED);
             post.setEditTime(now);
             post.setSummary(csdnBean.getDescription());
@@ -80,6 +82,7 @@ public class PostRepositoryTest {
             post.setUpdateTime(now);
             post.setEditorType(PostEditorType.RICHTEXT);
             post.setSlug(csdnBean.getArticle_id());
+            post.setMetaKeywords("novelly,"+csdnBean.getDescription());
             post = basePostRepository.save(post);
 
             if(StringUtils.isNotEmpty(csdnBean.getCategories())){

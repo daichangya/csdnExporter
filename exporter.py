@@ -3,6 +3,9 @@ import bs4
 import time
 import os
 import json
+from utils import Parser
+import tomd
+
 
 pwd = os.path.split(os.path.realpath(__file__))[0]
 
@@ -20,6 +23,11 @@ def getArticle(id):
     print(url)
     response = requests.get(url,headers=headers);
     responseJson = json.loads(response.content)
+    if responseJson['data']['markdowncontent'] == '':
+        text = tomd.convert(responseJson['data']['content'])
+        # parser = Parser(responseJson['data']['content'])
+        responseJson['data']["markdowncontent"] = text
+        # print(''.join(parser.outputs))
     write_txt(json.dumps(responseJson['data'],ensure_ascii=False),pwd+"/articles/"+id+".txt")
     time.sleep(1)
 
@@ -54,7 +62,6 @@ def getArticleList(name):
 
 # https://blog-console-api.csdn.net/v1/editor/getArticle?id=36398755
 if __name__ == '__main__':
-    name = "novelly"
-    idList = getArticleList(name)
-    for id in idList:
-        getArticle(id)
+    print(
+        tomd.convert('<tbody><tr><td><code class="highlighter-rouge">Heading level 1<br>===============</code></td><td><code class="highlighter-rouge">&lt;h1&gt;Heading level 1&lt;/h1&gt;</code></td><td><h1 class="no-anchor" data-toc-skip="" id="heading-level-1-1">Heading level 1</h1></td></tr><tr><td><code class="highlighter-rouge">Heading level 2<br>---------------</code></td><td><code class="highlighter-rouge">&lt;h2&gt;Heading level 2&lt;/h2&gt;</code></td><td><h2 class="no-anchor" data-toc-skip="" id="heading-level-2-1">Heading level 2</h2></td></tr></tbody>')
+    )

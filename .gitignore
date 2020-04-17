@@ -18,6 +18,8 @@ target/
 */system.properties
 
 articles/*.txt
+figures/
+
 
 # netbeans ignore
 nb-configuration.xml
